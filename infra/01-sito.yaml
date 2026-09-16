@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Bacheca ITS - il bucket che ospita il sito, dichiarato come codice.
+  Stessa roba della Fase 1, ma scritta invece che digitata a mano.
+
+Parameters:
+  NomeBucket:
+    Type: String
+    Description: Nome del bucket che ospitera' il sito (deve essere unico)
+    Default: bacheca-cfn
+
+Resources:
+
+  BucketSito:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref NomeBucket
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: errore.html
+      # Su AWS vero questo blocco va spento per poter rendere pubblico il bucket.
+      # Lo lasciamo qui perche' e' esattamente il passaggio che dimentica il 90% delle persone.
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+
+  PolicyLetturaPubblica:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref BucketSito
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: ChiunquePuoLeggere
+            Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Sub 'arn:aws:s3:::${NomeBucket}/*'
+
+Outputs:
+  NomeDelBucket:
+    Description: Come si chiama il bucket creato
+    Value: !Ref BucketSito
+  ComeVederlo:
+    Description: Comando per aprire il sito nel browser
+    Value: !Sub './scripts/90-anteprima.sh ${NomeBucket}'
+  UrlStileAws:
+    Description: >
+      URL in stile "sito web S3". Funziona su Docker Desktop in locale;
+      dentro un Codespace usa invece lo script di anteprima.
+    Value: !Sub 'http://${NomeBucket}.s3-website.localhost.localstack.cloud:4566'

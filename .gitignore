@@ -1,0 +1,5 @@
+dist/
+.anteprima/
+.volume/
+sorgente.zip
+.env

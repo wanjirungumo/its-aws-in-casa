@@ -1,0 +1,21 @@
+version: 0.2
+
+# NOTA per LocalStack: niente blocco "env:" qui dentro.
+# L'emulatore non supporta ancora le variabili d'ambiente dichiarate nel buildspec:
+# se ti servono, si passano nella definizione del progetto CodeBuild.
+
+phases:
+  build:
+    commands:
+      - echo "=== BUILD iniziata il $(date) ==="
+      - bash build.sh
+  post_build:
+    commands:
+      - echo "=== TEST ==="
+      - bash test.sh
+      - echo "=== Tutto verde, consegno dist/ come artefatto ==="
+
+artifacts:
+  base-directory: dist
+  files:
+    - '**/*'

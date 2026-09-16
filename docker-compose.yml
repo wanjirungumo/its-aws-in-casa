@@ -1,0 +1,16 @@
+services:
+  localstack:
+    container_name: localstack-its
+    image: localstack/localstack:${LOCALSTACK_TAG:-latest}
+    ports:
+      - "4566:4566"
+    environment:
+      # Token del piano studente (GitHub Student Pack). Senza token parte comunque,
+      # ma solo con i servizi del piano gratuito (niente CodeBuild / CodePipeline).
+      - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN:-}
+      - DEBUG=${DEBUG:-0}
+      # serve a CodeBuild e Lambda: LocalStack lancia container "figli"
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "./.volume:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"

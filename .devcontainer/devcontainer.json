@@ -1,0 +1,26 @@
+{
+  "name": "AWS in casa - LocalStack ITS",
+  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/aws-cli:1": {},
+    "ghcr.io/devcontainers/features/python:1": { "version": "3.11" }
+  },
+  "forwardPorts": [4566, 8080],
+  "portsAttributes": {
+    "4566": { "label": "LocalStack (AWS finto)", "onAutoForward": "silent" },
+    "8080": { "label": "Anteprima sito", "onAutoForward": "notify" }
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "remoteEnv": {
+    "AWS_ACCESS_KEY_ID": "test",
+    "AWS_SECRET_ACCESS_KEY": "test",
+    "AWS_DEFAULT_REGION": "us-east-1",
+    "AWS_PAGER": ""
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["amazonwebservices.aws-toolkit-vscode", "redhat.vscode-yaml"]
+    }
+  }
+}

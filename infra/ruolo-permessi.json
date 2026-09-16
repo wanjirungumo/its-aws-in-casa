@@ -1,0 +1,16 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "FaiQualsiasiCosaSuS3ECodeBuild",
+      "Effect": "Allow",
+      "Action": [
+        "s3:*",
+        "codebuild:StartBuild",
+        "codebuild:BatchGetBuilds",
+        "logs:*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
